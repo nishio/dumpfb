@@ -1,0 +1,32 @@
+data = file('activity2.txt').read()
+import re
+
+data = data.replace("""</span><wbr><span class="word_break"></span><span>""", "")
+data = data.replace("""</span><wbr><span class="word_break"></span>""", "")
+data = re.sub("<table[^>]+>", "", data)
+data = re.sub(" *class=\"[^\"]+\" *", "", data)
+data = data.replace(r"""<imgsrc="https://fbcdn-photos-c-a.akamaihd.net/hphotos-ak-xfa1/t39.2080-0/851565_10151397911967544_632525583_n.png" alt=""><div><div><ahref="https://www.facebook.com/nishiohirokazu" data-hovercard="/ajax/hovercard/user.php?id=1129148772">Nishio Hirokazu</a>""", "NISHIO Hirokazu")
+data = data.replace("<tbody><tr><td><div>", "")
+data = re.sub(r"""<a ?href="[^"]+"[^>]+>""", r"<A>", data)
+data = re.sub(r"""<A>([^<]+)</a>""", r"<A>\1</A>", data)
+data = re.sub(r"""<imgsrc="[^"]+"[^>]+>""", r"<IMG>", data)
+data = data.replace("</span></div></div></td><td><div><span>", "")
+data = data.replace("</span></div></div></td><td><div><IMG></div><div>", "")
+data = re.sub("NISHIO Hirokazu posted something via <A>Twitter</A>..*", "", data)
+data = re.sub("</div></td><td><div><div><div>.*", "", data)
+data = re.sub("<IMG><div><div>You like.*", "", data)
+data = data.replace("</span></div></div></td><td><div>", "")
+data = data.replace("<div><IMG></div><div><A><span>", "")
+data = re.sub(""".*<ahref="([^"]+)">([\d:]+[ap]m)</a>""", r"\2 \1\n<START>", data)
+data = re.sub("""<START>.*? on Twitter</span></a><div>twitter.com</div></div></div><div>(<span>)?""", "<START>", data)
+data = re.sub("""<a data[^>]+>""", "<A>", data)
+data = re.sub("""<td><div><A>(<i></i>|<IMG>)</a><divid="[^"]+"><A><spanstyle="max-width:200px;"><i></i></span></a></div>""", "", data)
+data = data.replace("</tr></tbody></table>", "")
+data = data.replace("</div></td>", "\n")
+
+
+data = re.sub("</?span>", "", data)
+data = re.sub("</?div>", "", data)
+data = data.replace("<START>", "")
+data = re.sub("\n\n+", "\n\n", data)
+print data
